@@ -1,0 +1,11 @@
+{
+  "ba": "ERCO",
+  "n_folds": 12,
+  "naive_mae": 5515.913194444444,
+  "model_mae_no_weather": 2302.008741725663,
+  "model_mae_weather": 1910.898065291535,
+  "weather_mae_improvement_pct": 16.989973554181137,
+  "skill_vs_naive_no_weather": 0.5826604479482715,
+  "skill_vs_naive_weather": 0.6535663274729981,
+  "coverage80_weather": 0.78125
+}

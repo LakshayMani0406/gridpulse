@@ -1,0 +1,30 @@
+{
+  "factor": "prod_mef",
+  "total_new_mw": 10000.0,
+  "actual_mt_co2_yr": 33.19206911940348,
+  "optimal_unconstrained_mt_co2_yr": 0.6500293347782163,
+  "gap_unconstrained_mt_co2_yr": 32.54203978462526,
+  "best_ba": "BPAT",
+  "best_factor": 7.420426196098361,
+  "covered_share": 0.9999999999999992,
+  "optimal_constrained_mt_co2_yr": 7.988162704372058,
+  "gap_constrained_mt_co2_yr": 25.203906415031422,
+  "gap_constrained_pct": 75.93351991514646,
+  "constrained_placement_mw": {
+    "BPAT": 1400,
+    "PACW": 473,
+    "IPCO": 433,
+    "PGE": 534,
+    "LDWP": 548,
+    "AZPS": 883,
+    "PSCO": 1038,
+    "PACE": 1214,
+    "NEVP": 934,
+    "CISO": 2543
+  },
+  "optimal_mt_co2_yr": 0.6500293347782163,
+  "gap_mt_co2_yr": 32.54203978462526,
+  "gap_pct": 98.04161249351515,
+  "gap_constrained_mt_co2_yr_cons_basis": 31.716578901914186,
+  "best_ba_cons_basis": "CISO"
+}

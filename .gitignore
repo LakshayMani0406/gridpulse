@@ -1,0 +1,34 @@
+# secrets
+.env
+*.key
+*.pem
+
+# data (regenerated from the live API)
+data/cache/
+data/warehouse/
+data/raw/
+*.duckdb
+*.duckdb.wal
+
+# python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.coverage
+htmlcov/
+
+# os / editor
+.DS_Store
+.ipynb_checkpoints/
+
+# charts are regenerated; keep the ones referenced by docs under docs/figs/
+data/figs/
+
+# run logs (noise); keep small result artifacts like data/ranking.csv, gap.json
+data/*.log
