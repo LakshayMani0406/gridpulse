@@ -44,7 +44,10 @@ jobs:
           MONTHS="${MONTHS:-3}"
           python -m gridpulse.cli backfill --months "$MONTHS"
           python -m gridpulse.cli run-now
-          python -m gridpulse.cli validate --months 3 || echo "validation skipped (workbook fetch)"
+          # NOTE: the AEF-vs-EIA-930 validation (gridpulse validate) downloads
+          # ~600 MB of EIA workbooks and is run locally, where its results are
+          # committed to EVIDENCE.md. It is intentionally omitted from CI to keep
+          # the monthly refresh fast; the live pull + secret are proven above.
 
       - name: Commit refreshed results + warehouse snapshots
         run: |
