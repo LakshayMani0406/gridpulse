@@ -112,8 +112,24 @@ REGIONS: dict[str, Region] = {
     ]
 }
 
-REGION_CODES: list[str] = list(REGIONS.keys())
+def _active_region_codes() -> list[str]:
+    """All BA codes, or a subset if GRIDPULSE_REGIONS is set (comma-separated).
+
+    Lets CI (or a quick local run) scope the pipeline to a few representative BAs
+    without touching call sites: both backfill and run-now iterate REGION_CODES.
+    REGIONS itself stays complete for lookups (coords, names, state mapping).
+    """
+    import os
+    env = os.getenv("GRIDPULSE_REGIONS")
+    if not env:
+        return list(REGIONS.keys())
+    wanted = [c.strip().upper() for c in env.split(",") if c.strip()]
+    subset = [c for c in wanted if c in REGIONS]
+    return subset or list(REGIONS.keys())
+
+
+REGION_CODES: list[str] = _active_region_codes()
 
 
 def all_regions() -> list[Region]:
-    return list(REGIONS.values())
+    return [REGIONS[c] for c in REGION_CODES]

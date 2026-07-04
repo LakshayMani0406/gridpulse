@@ -39,6 +39,10 @@ jobs:
       - name: Live refresh (bounded window)
         env:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+          # Scope CI to a representative, fuel-diverse subset of BAs so the
+          # monthly refresh stays fast (a full 27-BA backfill takes ~30 min on
+          # the runner). Full backfills run locally. Blank env = all 27 BAs.
+          GRIDPULSE_REGIONS: "CISO,ERCO,MISO,SOCO,ISNE,BPAT"
         run: |
           MONTHS="${{ github.event.inputs.months }}"
           MONTHS="${MONTHS:-3}"

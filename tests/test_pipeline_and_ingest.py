@@ -11,6 +11,15 @@ def test_regions_nonempty_and_diverse():
     assert "CISO" in REGION_CODES and "ERCO" in REGION_CODES and "BPAT" in REGION_CODES
 
 
+def test_region_env_filter(monkeypatch):
+    import gridpulse.regions as R
+    monkeypatch.setenv("GRIDPULSE_REGIONS", "CISO, erco , NOPE")
+    codes = R._active_region_codes()
+    assert codes == ["CISO", "ERCO"]  # case-insensitive, unknown dropped
+    monkeypatch.delenv("GRIDPULSE_REGIONS")
+    assert len(R._active_region_codes()) >= 20  # full set when unset
+
+
 def test_factor_defaults_and_fossil_split():
     assert factor_for("COL") > factor_for("NG") > 0
     assert factor_for("NUC") == 0.0  # EIA production basis
