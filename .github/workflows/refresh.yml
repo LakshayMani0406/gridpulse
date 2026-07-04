@@ -53,12 +53,15 @@ jobs:
           # committed to EVIDENCE.md. It is intentionally omitted from CI to keep
           # the monthly refresh fast; the live pull + secret are proven above.
 
-      - name: Commit refreshed results + warehouse snapshots
+      - name: Commit refreshed results
         run: |
           git config user.name "gridpulse-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add -f data/warehouse/*.parquet data/warehouse/manifest.json \
-                     docs/report.md data/figs/*.png EVIDENCE.md FINDINGS.md 2>/dev/null || true
+          # Commit only human-readable results. The binary warehouse (DuckDB +
+          # Parquet) is uploaded as an artifact below, not committed -- committing
+          # it caused manifest/subset sync conflicts and git bloat.
+          git add -f docs/report.md data/figs/*.png EVIDENCE.md FINDINGS.md \
+                     data/ranking.csv data/gap.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "no changes to commit"
           else

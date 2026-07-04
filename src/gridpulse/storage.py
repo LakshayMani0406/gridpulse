@@ -175,3 +175,27 @@ class Warehouse:
 
     def watermark_by_ba(self, table: str) -> dict[str, str]:
         return self.load_manifest().get(table, {}).get("watermark_by_ba", {})
+
+    def rebuild_manifest(self) -> dict:
+        """Recompute the manifest from the actual data (source of truth).
+
+        Recovers from a stale/foreign manifest (e.g. one restored from a CI
+        artifact for a different BA subset) by scanning each table's real
+        contents for global and per-entity watermarks.
+        """
+        man: dict = {}
+        for table, spec in SCHEMAS.items():
+            df = self.read(table)
+            if df.empty:
+                continue
+            tcol = spec["time"]
+            entry: dict = {"watermark": str(df[tcol].astype(str).max()),
+                           "rows_last_upsert": int(len(df)),
+                           "updated_at": datetime.now(timezone.utc).isoformat()}
+            bacol = self._ba_col(table)
+            if bacol and bacol in df.columns:
+                by = df.groupby(bacol)[tcol].max().astype(str)
+                entry["watermark_by_ba"] = {str(k): str(v) for k, v in by.items()}
+            man[table] = entry
+        self.cfg.manifest_path.write_text(json.dumps(man, indent=2, sort_keys=True))
+        return man

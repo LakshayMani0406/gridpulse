@@ -55,6 +55,17 @@ def test_read_missing_table_empty(wh):
     assert wh.read("interchange").empty
 
 
+def test_rebuild_manifest_from_data(wh):
+    wh.upsert("demand", _demand_rows(["2024-01-01T00", "2024-01-01T05"], ba="CISO"))
+    wh.upsert("demand", _demand_rows(["2024-03-01T00"], ba="BPAT"))
+    # clobber the manifest with a stale/foreign value, then rebuild from data
+    wh.cfg.manifest_path.write_text('{"demand": {"watermark": "1999-01-01T00", '
+                                    '"watermark_by_ba": {"XXXX": "1999-01-01T00"}}}')
+    man = wh.rebuild_manifest()
+    assert man["demand"]["watermark"] == "2024-03-01T00"
+    assert man["demand"]["watermark_by_ba"] == {"CISO": "2024-01-01T05", "BPAT": "2024-03-01T00"}
+
+
 def test_per_ba_watermark_tracks_each_ba(wh):
     wh.upsert("demand", _demand_rows(["2024-01-01T00", "2024-01-01T05"], ba="CISO"))
     wh.upsert("demand", _demand_rows(["2024-03-01T00"], ba="BPAT"))
