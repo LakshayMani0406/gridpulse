@@ -6,9 +6,12 @@
 - [x] **Thrust 2 — nodal LME** (`nodal.py`): CAISO OASIS nodal congestion (no-auth, reproducible) → intra-CISO marginal-carbon spread ≈ ±50% around BA-average; cleanest nodes are export-constrained solar buses. (Switched from ERCOT: ERCOT nodal now auth-gated + CEII-restricted.)
 - [x] **Thrust 5 — probabilistic siting** (`thrust5.py`): propagate MEF bootstrap CIs → rank distributions, P(in top-k), pairwise P(A greener than B), statistical-tie detection.
 - [x] **Thrust 6 — multiverse capstone** (`multiverse.py`, `phase3.py`): specification curve over {temporal × accounting × spatial × method}. 22/27 BAs flip siting rank across just 4 specs; only Pacific-NW hydro robustly green. Spec-curve figure.
-- [~] **Thrust 1 — short-run vs long-run** (`thrust1.py`): Holland reproduction (marginal stickiness vs falling average; needs 2019+ backfill) + Cambium LRMER rank flips (loader pending research). Logic built + tested.
-- [x] `PAPER.md` drafted (arXiv target) — intro/data/methods/limitations/reproducibility; results filled from the live run.
-- [ ] Run `phase3` end-to-end with Cambium injected → final FINDINGS + figure; fill PAPER results.
+- [x] **Thrust 1 — short-run vs long-run** (`thrust1.py`, `cambium.py`): NREL Cambium 2024 LRMER/SRMER fetched per BA (Scenario Viewer API). Short-run→long-run rank flips: **IPCO −22** (hydro greenest short-run, dirty long-run), MISO +16, ISNE +12. Holland reproduction on 2019–2025 backfill: **4 of 8 BAs have a stickier marginal than average**.
+- [x] Backward backfill to 2019 (8 fuel-diverse BAs, ~6.3M fuel rows total) for the Holland trend.
+- [x] `PAPER.md` (arXiv target) with real §4 results + honest limitations.
+- [x] `phase3` master run: 6 specifications, **24/27 BAs flip**, only BPAT+PACW robust-green; spec-curve figure + all FINDINGS sections generated from real data.
+- [x] Warehouse hygiene: stopped committing binary warehouse to git; `rebuild_manifest` recovers watermarks from data.
+- [x] 63 tests green; ruff clean.
 
 ## v0.1.0 — core (built + validated on synthetic, then wired to live data)
 

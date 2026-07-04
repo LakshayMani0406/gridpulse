@@ -38,12 +38,14 @@ def assemble_specifications(
     demand_long: pd.DataFrame,
     interchange: pd.DataFrame | None = None,
     extra_specs: dict[str, pd.Series] | None = None,
+    vre_mef: pd.Series | None = None,
 ) -> dict[str, pd.Series]:
     """Compute a per-BA carbon factor (kg/MWh) under each available specification.
 
     Returns {spec_name: Series indexed by BA}. Specs requiring data not present
     (interchange) are omitted. ``extra_specs`` injects externally-computed per-BA
-    factor Series (e.g. Cambium LRMER, Cambium SRMER).
+    factor Series (e.g. Cambium LRMER, Cambium SRMER). ``vre_mef`` (from an
+    already-run triangulation) is reused instead of recomputing it here.
     """
     specs: dict[str, pd.Series] = {}
     asm = emissions.assemble_hourly(fuel_long, demand_long)
@@ -54,9 +56,11 @@ def assemble_specifications(
     mef = emissions.mef_by_ba(asm, driver="demand", n_boot=200).set_index("ba")["mef_kg_per_mwh"]
     specs["MEF short-run prod (regression)"] = mef
 
-    tri = triangulate_mef(fuel_long, demand_long, sorted(asm["ba"].unique()))
-    if not tri.empty and tri["mef_vre_ramp"].notna().any():
-        specs["MEF short-run prod (VRE instrument)"] = tri.set_index("ba")["mef_vre_ramp"].dropna()
+    if vre_mef is None:
+        tri = triangulate_mef(fuel_long, demand_long, sorted(asm["ba"].unique()))
+        vre_mef = tri.set_index("ba")["mef_vre_ramp"].dropna() if not tri.empty else pd.Series(dtype=float)
+    if vre_mef is not None and len(vre_mef):
+        specs["MEF short-run prod (VRE instrument)"] = vre_mef.dropna()
 
     if interchange is not None and not interchange.empty:
         bas = sorted(set(fuel_long["ba"]) & set(interchange["from_ba"]))

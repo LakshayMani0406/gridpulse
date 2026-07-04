@@ -106,7 +106,9 @@ def run_phase3(cfg: Config | None = None) -> dict:
         extra["LRMER long-run (Cambium)"] = lrmer
     if srmer is not None:
         extra["SRMER short-run (Cambium model)"] = srmer
-    specs = multiverse.assemble_specifications(fuel, demand, interchange, extra_specs=extra)
+    vre_mef = tri.set_index("ba")["mef_vre_ramp"].dropna() if not tri.empty else None
+    specs = multiverse.assemble_specifications(fuel, demand, interchange, extra_specs=extra,
+                                               vre_mef=vre_mef)
     ranks, rob = multiverse.spec_curve(specs)
     stability = multiverse.top_choice_stability(specs, k=5)
     ranks.to_csv(cfg.data_dir / "multiverse_ranks.csv")

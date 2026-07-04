@@ -96,6 +96,16 @@ the diagonal are dirtier on the margin than the average suggests:
 ![Average vs marginal](docs/figs/aef_vs_mef.png)
 ![AEF vs MEF by BA](docs/figs/rank_scatter.png)
 
+**The multiverse (headline research finding).** The carbon-optimal siting
+recommendation is contingent on the analyst's accounting choices. Ranking BAs under
+six defensible specifications (average; short-run marginal by regression, by VRE
+instrument, and consumption/import-adjusted; long-run Cambium LRMER; Cambium
+short-run), **24 of 27 balancing authorities flip their siting rank** — IPCO spans
+rank 3→25 — and only two Pacific-NW hydro BAs (BPAT, PACW) are robustly green.
+See [`PAPER.md`](PAPER.md) and [`FINDINGS.md`](FINDINGS.md).
+
+![Specification curve](docs/figs/spec_curve.png)
+
 ## Data sources & methods
 
 - EIA API v2 — hourly fuel mix / demand / interchange / retail sales.
