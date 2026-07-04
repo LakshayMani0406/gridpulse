@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 
 from gridpulse.thrust5 import indistinguishable_pairs, probabilistic_siting

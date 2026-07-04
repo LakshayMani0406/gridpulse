@@ -1,5 +1,15 @@
 # Changelog / running checklist
 
+## Phase 3 — research-grade: robustness of siting to accounting choices
+
+- [x] **Thrust 3 — MEF validation** (`causal_mef.py`): triangulate Siler-Evans vs VRE-ramp instrument vs generation-trip instrument. Converge <20% for fossil-margin BAs (PJM 3%, SWPP 6%, SOCO 10%, MISO 15%); diverge for storage/solar-heavy (CISO, ERCO) — the margin is only well-identified where a single fossil unit sets it.
+- [x] **Thrust 2 — nodal LME** (`nodal.py`): CAISO OASIS nodal congestion (no-auth, reproducible) → intra-CISO marginal-carbon spread ≈ ±50% around BA-average; cleanest nodes are export-constrained solar buses. (Switched from ERCOT: ERCOT nodal now auth-gated + CEII-restricted.)
+- [x] **Thrust 5 — probabilistic siting** (`thrust5.py`): propagate MEF bootstrap CIs → rank distributions, P(in top-k), pairwise P(A greener than B), statistical-tie detection.
+- [x] **Thrust 6 — multiverse capstone** (`multiverse.py`, `phase3.py`): specification curve over {temporal × accounting × spatial × method}. 22/27 BAs flip siting rank across just 4 specs; only Pacific-NW hydro robustly green. Spec-curve figure.
+- [~] **Thrust 1 — short-run vs long-run** (`thrust1.py`): Holland reproduction (marginal stickiness vs falling average; needs 2019+ backfill) + Cambium LRMER rank flips (loader pending research). Logic built + tested.
+- [x] `PAPER.md` drafted (arXiv target) — intro/data/methods/limitations/reproducibility; results filled from the live run.
+- [ ] Run `phase3` end-to-end with Cambium injected → final FINDINGS + figure; fill PAPER results.
+
 ## v0.1.0 — core (built + validated on synthetic, then wired to live data)
 
 - [x] Repo scaffold: `pyproject.toml` (`prod`/`research`/`dev` extras), package layout, `.gitignore`, `.env` (reused EIA key), git init.

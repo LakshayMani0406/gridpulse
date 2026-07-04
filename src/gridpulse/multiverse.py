@@ -29,7 +29,7 @@ SPEC_TAGS = {
     "MEF short-run prod (VRE instrument)": dict(temporal="short-run", accounting="production", resolution="BA", method="dispatch"),
     "MEF short-run consumption (flow-trace)": dict(temporal="short-run", accounting="consumption", resolution="BA", method="flow-tracing"),
     "LRMER long-run (Cambium)": dict(temporal="long-run", accounting="production", resolution="BA", method="Cambium"),
-    "LME nodal (ERCOT)": dict(temporal="short-run", accounting="production", resolution="nodal", method="dispatch"),
+    "SRMER long-run-model (Cambium)": dict(temporal="short-run", accounting="production", resolution="BA", method="Cambium"),
 }
 
 
@@ -37,13 +37,13 @@ def assemble_specifications(
     fuel_long: pd.DataFrame,
     demand_long: pd.DataFrame,
     interchange: pd.DataFrame | None = None,
-    lrmer: pd.Series | None = None,
-    nodal_lme: pd.Series | None = None,
+    extra_specs: dict[str, pd.Series] | None = None,
 ) -> dict[str, pd.Series]:
     """Compute a per-BA carbon factor (kg/MWh) under each available specification.
 
     Returns {spec_name: Series indexed by BA}. Specs requiring data not present
-    (interchange, LRMER, nodal) are simply omitted.
+    (interchange) are omitted. ``extra_specs`` injects externally-computed per-BA
+    factor Series (e.g. Cambium LRMER, Cambium SRMER).
     """
     specs: dict[str, pd.Series] = {}
     asm = emissions.assemble_hourly(fuel_long, demand_long)
@@ -68,10 +68,9 @@ def assemble_specifications(
         if not cm.empty:
             specs["MEF short-run consumption (flow-trace)"] = cm.set_index("ba")["consumption_mef_kg_per_mwh"]
 
-    if lrmer is not None and not lrmer.empty:
-        specs["LRMER long-run (Cambium)"] = lrmer
-    if nodal_lme is not None and not nodal_lme.empty:
-        specs["LME nodal (ERCOT)"] = nodal_lme
+    for name, series in (extra_specs or {}).items():
+        if series is not None and len(series):
+            specs[name] = series
     return specs
 
 
