@@ -1,0 +1,76 @@
+cff-version: 1.2.0
+message: "If you use gridpulse, please cite it using these metadata."
+title: "gridpulse: robustness of carbon-optimal data-center siting to the carbon-accounting choice"
+abstract: >-
+  A reproducible pipeline and specification-curve (multiverse) analysis showing that
+  carbon-optimal data-center siting is not robust to the carbon-accounting choice.
+  Using two years of hourly EIA-930 data for 27 US balancing authorities, gridpulse
+  computes a per-BA carbon factor under a multiverse of accounting choices (temporal,
+  accounting boundary, spatial resolution, estimation method) and finds that 24 of 27
+  balancing authorities change siting rank, with only the Pacific-Northwest hydro core
+  robust across every choice.
+type: software
+authors:
+  - family-names: Mani
+    given-names: Lakshay
+    email: mani.l@northeastern.edu
+version: 0.2.0
+date-released: "2026-07-05"
+license: MIT
+repository-code: "https://github.com/LakshayMani0406/gridpulse"
+url: "https://github.com/LakshayMani0406/gridpulse"
+keywords:
+  - marginal emissions
+  - grid carbon
+  - data-center siting
+  - specification curve
+  - multiverse analysis
+  - EIA-930
+  - balancing authority
+references:
+  - type: article
+    authors:
+      - family-names: Siler-Evans
+        given-names: Kyle
+      - family-names: Azevedo
+        given-names: "Inês L."
+      - family-names: Morgan
+        given-names: "M. Granger"
+    title: "Marginal emissions factors for the U.S. electricity system"
+    year: 2012
+    doi: "10.1021/es300145v"
+  - type: article
+    authors:
+      - family-names: de Chalendar
+        given-names: "Jacques A."
+      - family-names: Taggart
+        given-names: John
+      - family-names: Azevedo
+        given-names: "Inês L."
+    title: "Tracking emissions in the US electricity system"
+    year: 2019
+    doi: "10.1073/pnas.1912950116"
+  - type: article
+    authors:
+      - family-names: Holland
+        given-names: "Stephen P."
+      - family-names: Kotchen
+        given-names: "Matthew J."
+      - family-names: Mansur
+        given-names: "Erin T."
+      - family-names: Yates
+        given-names: "Andrew J."
+    title: "Why marginal CO2 emissions are not decreasing for US electricity"
+    year: 2022
+    doi: "10.1073/pnas.2116632119"
+  - type: article
+    authors:
+      - family-names: Simonsohn
+        given-names: Uri
+      - family-names: Simmons
+        given-names: "Joseph P."
+      - family-names: Nelson
+        given-names: "Leif D."
+    title: "Specification curve analysis"
+    year: 2020
+    doi: "10.1038/s41562-020-0912-z"

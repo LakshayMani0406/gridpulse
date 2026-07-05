@@ -1,5 +1,27 @@
 # Changelog / running checklist
 
+## v0.2.0 — paper-ready release (Zenodo)
+
+Polished `PAPER.md` toward a submittable preprint (arXiv eess.SY / econ.EM) and made
+the repo citable. No pipeline or data changes; every paper number traces to committed
+outputs (`FINDINGS.md`, `EVIDENCE.md`, `data/multiverse_*.csv`, `data/gap.json`).
+
+- Reframed the paper around a single claim: **carbon-optimal data-center siting is not
+  robust to the carbon-accounting choice.** Tightened abstract and intro to match.
+- Replaced the bare "24/27 flip" count with the **distribution of rank-change
+  magnitudes** (24 flippers: 1 minor, 9 moderate, 10 large, 4 inversions; median 12
+  ranks; 10 span ≥half the fleet), computed from `data/multiverse_robustness.csv`.
+- Reframed the 6/23 triangulation convergence as **evidence for** the fragility thesis
+  (the margin is genuinely hard to identify), not as MEF validation.
+- Made subnetwork truncation the primary limitation and stated the **direction of bias**:
+  the 27-BA subnetwork drops out-of-network imports, so the consumption-MEF floor at 0
+  (CISO) *overstates* flip magnitude for import-heavy BAs and does not touch the robust
+  hydro core.
+- Added a **decision rule** (§5.1): site where robust (Pacific-NW hydro; ~25.2 MtCO2/yr
+  avoided, production basis) or hedge anti-correlated regions (IPCO+MISO, r=−0.93,
+  caps worst-case rank at 9 vs 25), all from committed numbers.
+- Added `CITATION.cff` (Zenodo DOI on release); bumped version to 0.2.0.
+
 ## Phase 3 — research-grade: robustness of siting to accounting choices
 
 - [x] **Thrust 3 — MEF validation** (`causal_mef.py`): triangulate Siler-Evans vs VRE-ramp instrument vs generation-trip instrument. Converge <20% for fossil-margin BAs (PJM 3%, SWPP 6%, SOCO 10%, MISO 15%); diverge for storage/solar-heavy (CISO, ERCO) — the margin is only well-identified where a single fossil unit sets it.

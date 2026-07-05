@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gridpulse"
-version = "0.1.0"
+version = "0.2.0"
 description = "Where should the next data center be sited to minimize marginal grid carbon? Average vs. marginal emission factors per US balancing authority, from live EIA data."
 readme = "README.md"
 requires-python = ">=3.10"
