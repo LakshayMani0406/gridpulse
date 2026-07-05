@@ -1,5 +1,15 @@
 # Changelog / running checklist
 
+## arXiv LaTeX build
+
+- Added `paper/` — LaTeX source (`paper.tex`), the four figures, and the built
+  `paper.pdf` (8 pages). Faithful transcription of `PAPER.md`; every number
+  re-checked against committed outputs before transcribing (the 6/23 triangulation
+  denominator matches `phase3.py`, which drops PGE for having no VRE-ramp estimate).
+- Self-contained: manual `thebibliography`, no BibTeX pass. Builds with tectonic;
+  verified to compile from a clean tarball extract (arXiv-ready). Build + submit
+  steps in `paper/README.md`.
+
 ## v0.2.0 — paper-ready release (Zenodo)
 
 Polished `PAPER.md` toward a submittable preprint (arXiv eess.SY / econ.EM) and made

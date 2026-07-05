@@ -32,3 +32,9 @@ data/figs/
 
 # run logs (noise); keep small result artifacts like data/ranking.csv, gap.json
 data/*.log
+
+# paper: regenerated arXiv tarball + latex aux; keep paper.tex, figs/, paper.pdf
+paper/arxiv-submission.tar.gz
+paper/*.aux
+paper/*.log
+paper/*.out
