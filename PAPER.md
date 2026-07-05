@@ -43,7 +43,7 @@ each capable of inverting which region is "greenest":
 1. **Temporal horizon.** The short-run *dispatch* margin (which existing unit
    ramps) differs from the long-run *build* margin (what new capacity the load
    induces). Short-run-optimal operation can raise long-run emissions
-   (Gagnon, Ricks, Jenkins et al. 2022); marginal factors have not fallen as fast
+   (Gagnon & Cole 2022); marginal factors have not fallen as fast
    as average factors (Holland et al. 2022).
 2. **Accounting boundary.** Production-based emissions ignore that a BA may serve
    load with dirty imports; consumption-based (import-adjusted) accounting via
@@ -152,9 +152,9 @@ The carbon-optimal siting recommendation is contingent on the analyst's accounti
 choices to a degree that undermines single-metric guidance. The robust policy
 signal is narrow — Pacific-NW hydro — and everywhere else the verdict depends on
 whether one prices short- or long-run carbon, production or consumption, BA-average
-or nodal, and by which estimator. Siting policy and 24/7-CFE procurement should
-therefore report the accounting choice explicitly and prefer regions robust across
-the multiverse. §5.1 makes this actionable.
+or nodal, and by which estimator. Siting policy and 24/7-CFE procurement
+(Ricks, Xu & Jenkins 2023) should therefore report the accounting choice explicitly
+and prefer regions robust across the multiverse. §5.1 makes this actionable.
 
 ### 5.1 A decision rule under fragility
 
@@ -239,9 +239,15 @@ credential is a free EIA API key. CI runs the live refresh monthly. Cite via
 - Holland, Kotchen, Mansur & Yates (2022). Why marginal CO2 emissions are not
   decreasing for US electricity. *PNAS* 119(37):e2116632119.
   doi:10.1073/pnas.2116632119.
-- Gagnon, Ricks, Jenkins et al. (2022). / Ricks, Xu & Jenkins. Minimizing emissions
-  from grid-based electricity. *PNAS*.
+- Gagnon, P. & Cole, W. (2022). Planning for the evolution of the electric grid with
+  a long-run marginal emission rate. *iScience* 25(3):103915.
+  doi:10.1016/j.isci.2022.103915.
+- Ricks, W., Xu, Q. & Jenkins, J. D. (2023). Minimizing emissions from grid-based
+  hydrogen production in the United States. *Environ. Res. Lett.* 18(1):014025.
+  doi:10.1088/1748-9326/acacb5.
 - Simonsohn, Simmons & Nelson (2020). Specification curve analysis. *Nature Human
   Behaviour* 4:1208. doi:10.1038/s41562-020-0912-z.
 - NREL Cambium (Gagnon et al.). https://www.nrel.gov/analysis/cambium.html
-- LME validation (2024). *Environ. Res.: Energy*. doi:10.1088/2753-3751/ad72f6.
+- Steinsultz, N., Christian, P., Cofield, J., McCormick, G. & Sofia, S. (2024).
+  Validating locational marginal emissions models with wind generation.
+  *Environ. Res.: Energy* 1(3). doi:10.1088/2753-3751/ad72f6.
