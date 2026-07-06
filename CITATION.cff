@@ -8,14 +8,17 @@ abstract: >-
   computes a per-BA carbon factor under a multiverse of accounting choices (temporal,
   accounting boundary, spatial resolution, estimation method) and finds that 24 of 27
   balancing authorities change siting rank, with only the Pacific-Northwest hydro core
-  robust across every choice.
+  robust across every choice. Version 1.0.0 turns the result into a constructive
+  decision rule (min-max regret over the accounting methods, whose robust site is the
+  Pacific-Northwest hydro core, stable under estimation uncertainty) and adds a
+  state-dependent autoregressive marginal-emissions estimator.
 type: software
 authors:
   - family-names: Mani
     given-names: Lakshay
     email: mani.l@northeastern.edu
-version: 0.2.0
-date-released: "2026-07-05"
+version: 1.0.0
+date-released: "2026-07-07"
 license: MIT
 repository-code: "https://github.com/LakshayMani0406/gridpulse"
 url: "https://github.com/LakshayMani0406/gridpulse"
@@ -27,6 +30,8 @@ keywords:
   - multiverse analysis
   - EIA-930
   - balancing authority
+  - min-max regret
+  - robust optimization
 references:
   - type: article
     authors:
