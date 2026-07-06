@@ -1,0 +1,28 @@
+ba,max_regret,worst_method,mean_regret,n_methods
+BPAT,20.920427999999994,AR-MEF short-run (state-dependent),3.8947901666666653,6
+PACW,57.145203,MEF short-run consumption (flow-trace),18.2390548,5
+CISO,142.65214799999998,AR-MEF short-run (state-dependent),54.44198733333334,6
+IPCO,188.33333299999998,LRMER long-run (Cambium),116.3842583333333,6
+PGE,239.44483,AR-MEF short-run (state-dependent),72.75791819999999,5
+PNM,255.96791699999997,MEF short-run prod (regression),168.513032,6
+AZPS,272.502257,MEF short-run consumption (flow-trace),154.7887116,5
+LDWP,301.660307,MEF short-run prod (VRE instrument),117.09336033333334,6
+NYIS,324.81419,MEF short-run consumption (flow-trace),175.7105006,5
+NEVP,333.50390600000003,AR-MEF short-run (state-dependent),199.0609035,6
+ISNE,357.386781,MEF short-run consumption (flow-trace),194.6842482,5
+ERCO,387.206945,MEF short-run prod (VRE instrument),226.65521483333336,6
+PSCO,399.96098,MEF short-run prod (VRE instrument),198.98245366666666,6
+SRP,429.863606,MEF short-run prod (VRE instrument),205.23087916666668,6
+FPL,442.321621,MEF short-run prod (VRE instrument),293.99640100000005,6
+PJM,444.416996,MEF short-run consumption (flow-trace),291.78499966666664,6
+CPLE,456.491098,MEF short-run consumption (flow-trace),240.66639450000002,6
+SOCO,482.336841,MEF short-run prod (VRE instrument),345.487957,5
+TVA,504.866142,MEF short-run prod (VRE instrument),230.51537933333336,6
+FPC,519.009214,MEF short-run consumption (flow-trace),354.2592568333334,6
+MISO,571.0856769999999,MEF short-run prod (regression),361.50572166666666,6
+SWPP,591.395352,MEF short-run prod (regression),406.1054755,6
+DUK,634.6330419999999,MEF short-run prod (VRE instrument),300.88648416666666,6
+WACM,667.2614699999999,MEF short-run prod (VRE instrument),283.38881639999994,5
+AECI,706.393871,MEF short-run consumption (flow-trace),357.2113286666667,6
+PACE,745.090017,AR-MEF short-run (state-dependent),306.0857343333333,6
+LGEE,790.833105,MEF short-run consumption (flow-trace),458.2802785,4

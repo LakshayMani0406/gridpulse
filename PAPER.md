@@ -87,6 +87,12 @@ close with a decision rule that follows directly from the fragility we measure.
 - **Supply-side instruments** (identification stress-test): (i) VRE-ramp — carbon
   displaced per MWh of exogenous wind/solar with demand held flat; (ii)
   generation-trip — emissions response to detected forced outages.
+- **State-dependent AR-MEF**: a two-regime Markov-switching model with an
+  autoregressive term and generation regressors (MS-ARX(1); Panico, Burlinson &
+  Grossi 2026), fit per BA. The marginal factor is the regime-specific coefficient
+  on non-renewable generation; we summarise it by the ergodic-probability-weighted
+  MEF. It extends the autoregressive MEF of Beltrami et al. (2020) and, like the
+  rest of gridpulse, drives off hourly generation rather than load.
 - **Nodal LME**: CAISO nodal congestion component modulating the BA system margin
   (directional only; exact nodal kg/MWh requires proprietary CEII shift factors).
 - **Long-run**: NREL Cambium LRMER/SRMER, mapped GEA-region → BA.
@@ -113,7 +119,13 @@ in `data/multiverse_robustness.csv`, multiverse figure in `docs/figs/spec_curve.
   because batteries and imports break the one-margin assumption. We do **not** read
   6/23 as validation of the MEF. It is direct evidence that the object the siting
   literature ranks on is genuinely ill-defined for three-quarters of the fleet — a
-  first-order reason the downstream ranking is fragile.
+  first-order reason the downstream ranking is fragile. Adding a fourth,
+  state-dependent estimator does not reconcile them: a Markov-switching AR MEF
+  (MS-ARX; §3) fit per BA leaves 20%-convergence at **3 of 26** and reveals *why*
+  — most BAs carry two very different regime marginal factors (median regime
+  spread **87%** among the BAs where the three supply-side estimators already
+  diverge, versus 34% where they agree). The short-run margin is genuinely
+  state-dependent, so there is no single scalar MEF to converge on.
 - **4.3 Consumption re-ranking.** Import-adjusted (flow-traced) marginal carbon
   moves several BAs 10+ ranks versus production-based (CPLE −14, PGE +11, ISNE −10).
 - **4.4 Nodal.** Within CISO, congestion spreads the directional marginal-carbon
@@ -186,6 +198,44 @@ worst-case rank at 12 versus 25 for WACM alone. (This assumes load can shift bet
 the paired sites and that the measured anti-correlation persists out of sample; the
 correlation is computed over the six specifications, not forecast.)
 
+### 5.2 Robust siting as min-max regret
+
+§5.1's rules follow from one optimisation. Treat the set of defensible accounting
+methods as an ambiguity set M — the six marginal methods (short-run regression
+MEF, VRE-instrument MEF, consumption MEF, Cambium LRMER, Cambium SRMER, and the
+state-dependent AR-MEF of §3) — each assigning a carbon cost c_m(r) to a fixed
+candidate load in region r. Define regret(r,m) = c_m(r) − min_r' c_m(r') and
+choose the site that minimises worst-case regret, r\* = argmin_r max_m regret(r,m)
+(min-max regret over a discrete scenario set; Aissi, Bazgan & Vanderpooten 2009;
+Bertsimas & Sim 2004; Ben-Tal, El Ghaoui & Nemirovski 2009).
+
+The min-max-regret site is **BPAT**, with a worst-case regret of **20.9 kg/MWh**
+(binding method: the AR-MEF) against **57 kg/MWh** for the runner-up PACW. BPAT is
+the outright optimum under four of the six methods and within 2.4 kg/MWh under a
+fifth, so its *price of robustness* — the most it can trail the best site under
+any single accounting choice — is small against factors that range past
+800 kg/MWh. The **low-regret core** (regions within 10% of each method's spread of
+optimal on *every* method) is exactly **{BPAT, PACW}**, recovering the
+specification curve's robust-green set from an optimisation rather than a
+classification. Propagating the regression-MEF estimation uncertainty (bootstrap
+and reference-prior Bayesian draws) leaves the min-max-regret site and the
+low-regret core unchanged in ~100% of draws: the verdict is robust to *both* the
+accounting method and estimation error. Where the hydro core is unavailable, the
+same objective selects a two-region hedge among the remaining BAs (an
+anti-correlated pair, rank correlation ≈ −0.99), formalising Rule B.
+
+This is, to our knowledge, the first treatment of carbon-accounting-**method**
+ambiguity as the scenario set for robust siting. It is distinct from the robust
+and distributionally-robust data-center literature, which hedges *physical*
+uncertainty — renewable output and workload (Han et al. 2025, 2026) or wind in
+data-center/grid co-planning (Dong et al. 2024). It is the constructive
+counterpart to empirical demonstrations that the accounting choice changes carbon
+decisions (Maji et al. 2024, "The Green Mirage"), and it transplants min-max
+regret over competing *models* (Rezai & van der Ploeg 2017, over DICE/FUND/PAGE)
+to competing accounting *methods*. We claim neither robustness to physical
+uncertainty nor a new estimator of the "true" MEF; the contribution is the
+decision rule and the empirically-computed robust core.
+
 ## 6. Limitations
 
 - **Subnetwork truncation (primary exposure).** All results hold **within the 27-BA
@@ -251,3 +301,35 @@ credential is a free EIA API key. CI runs the live refresh monthly. Cite via
 - Steinsultz, N., Christian, P., Cofield, J., McCormick, G. & Sofia, S. (2024).
   Validating locational marginal emissions models with wind generation.
   *Environ. Res.: Energy* 1(3). doi:10.1088/2753-3751/ad72f6.
+- Aissi, H., Bazgan, C. & Vanderpooten, D. (2009). Min-max and min-max regret
+  versions of combinatorial optimization problems: A survey. *European Journal of
+  Operational Research* 197(2):427–438. doi:10.1016/j.ejor.2008.09.012.
+- Bertsimas, D. & Sim, M. (2004). The price of robustness. *Operations Research*
+  52(1):35–53. doi:10.1287/opre.1030.0065.
+- Ben-Tal, A., El Ghaoui, L. & Nemirovski, A. (2009). *Robust Optimization*.
+  Princeton University Press. ISBN 978-0-691-14368-2.
+- Rezai, A. & van der Ploeg, F. (2017). Climate policies under climate model
+  uncertainty: Max-min and min-max regret. *Energy Economics* 68:4–16.
+  doi:10.1016/j.eneco.2017.10.018.
+- Panico, A., Burlinson, A. & Grossi, L. (2026). State-dependent marginal emission
+  factors with autoregressive components. *arXiv* 2603.04260.
+  doi:10.48550/arXiv.2603.04260.
+- Beltrami, F., Burlinson, A., Giulietti, M., Grossi, L., Rowley, P. & Wilson, G.
+  (2020). Where did the time (series) go? Estimation of marginal emission factors
+  with autoregressive components. *Energy Economics* 91:104905.
+  doi:10.1016/j.eneco.2020.104905.
+- Han, J., Han, K., Han, T., Wang, Y., Han, Y. & Lin, J. (2025). Data-driven
+  distributionally robust optimization of low-carbon data center energy systems
+  considering multi-task response and renewable energy uncertainty. *Journal of
+  Building Engineering* 102:111937. doi:10.1016/j.jobe.2025.111937.
+- Han, J., Tong, N., Lin, J., Han, Y., Wang, Y., Han, K. & Li, Y. (2026).
+  Distributionally robust co-optimization of computing workloads and renewable
+  energy uncertainties in geo-distributed data centers. *Energy Conversion and
+  Management: X* 29:101432. doi:10.1016/j.ecmx.2025.101432.
+- Dong, H., Wang, L., Zhang, X. & Zeng, M. (2024). A two-stage stochastic
+  collaborative planning approach for data centers and distribution network
+  incorporating demand response and multivariate uncertainties. *Journal of
+  Cleaner Production* 451:141482. doi:10.1016/j.jclepro.2024.141482.
+- Maji, D., Bashir, N., Irwin, D., Shenoy, P. & Sitaraman, R. K. (2024). The Green
+  Mirage: Impact of location- and market-based carbon intensity estimation on
+  carbon optimization efficacy. *arXiv* 2402.03550. doi:10.48550/arXiv.2402.03550.

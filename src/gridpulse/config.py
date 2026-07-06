@@ -33,6 +33,7 @@ HAS_SKLEARN = _has("sklearn")
 HAS_SCIPY = _has("scipy")
 HAS_CVXPY = _has("cvxpy")
 HAS_PYMC = _has("pymc")
+HAS_STATSMODELS = _has("statsmodels")
 
 # The DuckDB+Parquet warehouse activates only when both are present.
 WAREHOUSE_BACKEND = "duckdb" if (HAS_DUCKDB and HAS_PYARROW) else "csv"

@@ -1,5 +1,39 @@
 # Changelog / running checklist
 
+## Phase 4 — robust siting + state-dependent AR-MEF
+
+- **Build 1 (`robust.py`): min-max regret over accounting methods.** Region-by-method
+  regret matrix (absolute, relative, normalized) over the marginal ambiguity set,
+  the min-max-regret site, price of robustness, low-regret core, an OWA variant,
+  and a two-region hedge. The min-max-regret site is BPAT and the low-regret core
+  is {BPAT, PACW}, recovering the Pacific-NW robust-green set as an optimization
+  rather than a classification. Estimation uncertainty propagated (bootstrap and
+  reference-prior Bayesian draws of the regression MEF): site and core hold in
+  ~100% of draws, so the verdict is robust to method choice and estimation error.
+- **Build 2 (`state_mef.py`): state-dependent autoregressive MEF.** Per-BA two-regime
+  Markov-switching MS-ARX(1) via statsmodels; the regime-specific coefficient on
+  non-renewable generation is a fourth MEF estimator (fit 22 of 27 BAs). Adding it
+  does not improve triangulation convergence (6/24 to 3/26); it shows the margin is
+  state-dependent (median regime spread 87% where the 3-way triangulation diverges
+  vs 34% where it converges). The ergodic-weighted MEF feeds Build 1's ambiguity
+  set as a sixth method and the robust core is unchanged.
+- Persisted `data/multiverse_factors.csv` (the factor matrix the multiverse implied
+  but never committed; its six spec columns reproduce `multiverse_ranks.csv`
+  exactly), plus `data/state_ar_mef.csv`, `data/regret_matrix.csv`,
+  `data/robust_siting.csv`.
+- `phase3` orchestrator extended with Thrust 7 (AR-MEF, cached like Cambium) and
+  the Build 1 robust block; FINDINGS Build 1 and Build 2 sections generated from
+  real data.
+- PAPER.md: new section 5.2 (robust siting as min-max regret), AR-MEF in section 3,
+  state-dependence result in section 4.2, plus verified references (Aissi, Bazgan &
+  Vanderpooten 2009; Bertsimas & Sim 2004; Ben-Tal, El Ghaoui & Nemirovski 2009;
+  Rezai & van der Ploeg 2017; Panico, Burlinson & Grossi 2026; Beltrami et al.
+  2020; physical-uncertainty prior art Han et al. 2025/2026 and Dong et al. 2024;
+  Maji et al. 2024).
+- Dependency: `statsmodels>=0.14` added to the `research` extra.
+- New tests for both builds (`tests/test_robust.py`, `tests/test_state_mef.py`);
+  full suite green, ruff clean.
+
 ## arXiv LaTeX build
 
 - Added `paper/` — LaTeX source (`paper.tex`), the four figures, and the built

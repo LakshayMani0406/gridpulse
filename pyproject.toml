@@ -36,6 +36,7 @@ research = [
     "cvxpy>=1.4",
     "pymc>=5.10",
     "arviz>=0.17",
+    "statsmodels>=0.14",
     "streamlit>=1.30",
     "plotly>=5.18",
 ]

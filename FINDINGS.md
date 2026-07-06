@@ -193,3 +193,76 @@ Specifications: *AEF (avg, prod, BA)*; *MEF short-run prod (regression)*; *MEF s
 | PACE | 6 | 15.8 | 5 | 24 | flips |
 | PJM | 6 | 16.0 | 12 | 21 | flips |
 | WACM | 6 | 16.0 | 10 | 25 | flips |
+
+## Build 2 (Thrust 7): state-dependent autoregressive MEF
+
+A fourth, more principled MEF estimator: a per-BA two-regime Markov-switching model with an autoregressive term and generation regressors (MS-ARX(1)). The marginal factor is the coefficient on non-renewable generation and is *regime-specific*; we report both regime MEFs and the ergodic-probability-weighted scalar (fed into Build 1's ambiguity set). Driven off hourly generation, not load, so imported carbon is not misattributed to local marginal units. Spec: Panico, Burlinson & Grossi (2026, arXiv:2603.04260); AR-MEF precedent Beltrami et al. (2020, Energy Economics 91:104905, doi:10.1016/j.eneco.2020.104905).
+
+Fit converged for **22 of 27 BAs** (the rest hit singular fits, typically very clean or storage/import-dominated systems).
+
+| BA | Siler-Evans | VRE-ramp | state-AR (erg.) | low regime | high regime | regime spread % | 3-way spread % |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| FPC | 426 | 425 | 383 | 373 | 407 | 9 | 0 |
+| PJM | 400 | 414 | 260 | 249 | 533 | 109 | 3 |
+| SWPP | 599 | 567 | 482 | 476 | 487 | 2 | 5 |
+| MISO | 579 | 496 | 380 | 380 | 601 | 58 | 15 |
+| PGE | 51 | — | 283 | 59 | 413 | 125 | 38 |
+| FPL | 294 | 440 | 401 | 359 | 424 | 16 | 40 |
+| ERCO | 256 | 385 | 390 | 355 | 421 | 17 | 51 |
+| DUK | 352 | 632 | 164 | 164 | 164 | 0 | 57 |
+| CPLE | 311 | 145 | 226 | 200 | 247 | 21 | 73 |
+| TVA | 219 | 503 | 43 | 42 | 746 | 1633 | 79 |
+| SRP | 173 | 428 | 220 | 85 | 304 | 100 | 95 |
+| AECI | 526 | 138 | 519 | 460 | 563 | 20 | 117 |
+| CISO | 142 | 25 | 186 | 34 | 403 | 199 | 141 |
+| IPCO | 22 | 42 | 179 | 18 | 427 | 228 | 161 |
+| PSCO | 98 | 398 | 335 | 294 | 375 | 24 | 218 |
+| PNM | 263 | 70 | 184 | 48 | 368 | 174 | 245 |
+| PACE | 121 | 542 | 788 | 775 | 800 | 3 | 303 |
+| LDWP | 71 | 299 | 212 | 125 | 494 | 174 | 360 |
+| BPAT | 7 | -2 | 64 | 1 | 411 | 641 | 368 |
+| NEVP | 132 | 241 | 377 | 199 | 479 | 74 | 847 |
+| ISNE | 331 | — | 261 | 148 | 307 | 61 | — |
+| NYIS | 255 | — | 314 | 90 | 318 | 72 | — |
+
+**Triangulation convergence within 20%: 6/24 with three methods, 3/26 with the state-AR added -- a principled fourth estimator does not improve agreement.** The short-run margin stays method-dependent; a single scalar MEF is not recoverable for most BAs.
+
+**Why: the margin is genuinely state-dependent.** Most fitted BAs carry two materially different regime MEFs (a low, gas-like regime and a high, coal-like regime). The median regime spread is 87% for BAs where the 3-way triangulation diverges versus 34% where it converges -- the BAs with no agreed single MEF are largely those whose marginal unit switches regime. The link is in the central tendency, not linear (corr(regime spread, 3-way spread) = 0.03; heavy-tailed). Either way this supports the fragility thesis: the object the siting literature ranks on is not a well-defined scalar for most BAs. Ref: Environ. Res.: Energy 2024, doi:10.1088/2753-3751/ad72f6.
+
+## Build 1: robust siting under accounting-method ambiguity (min-max regret)
+
+The multiverse shows the siting rank flips across accounting methods. Instead of committing to one method, choose the site that minimises worst-case *regret* over the whole ambiguity set of 6 marginal methods: regret(r,m) = c_m(r) - min_r' c_m(r'); the robust site is argmin_r max_m regret(r,m). Min-max regret over a discrete scenario set: Aissi, Bazgan & Vanderpooten (2009, EJOR 197:427); Bertsimas & Sim (2004, Oper. Res. 52:35); Ben-Tal, El Ghaoui & Nemirovski (2009). Precedent for min-max regret across competing models: Rezai & van der Ploeg (2017, Energy Economics 68:4).
+
+Ambiguity set: MEF short-run prod (regression), MEF short-run prod (VRE instrument), MEF short-run consumption (flow-trace), LRMER long-run (Cambium), SRMER short-run (Cambium model), AR-MEF short-run (state-dependent).
+
+**Min-max-regret site: BPAT** -- worst-case regret 20.9 kg/MWh (binding method: AR-MEF short-run (state-dependent)) versus 57 kg/MWh for the runner-up PACW. **The low-regret core (within 10% of optimal on every method) is {BPAT, PACW}** -- exactly the Pacific-NW hydro set the specification curve flags as robust-green. The decision rule reproduces the robust core constructively; it is the only set a developer can build in without betting on the accounting choice.
+
+**Price of robustness at BPAT** (regret vs each method's own optimum, kg/MWh):
+
+| method | regret |
+|---|---:|
+| AR-MEF short-run (state-dependent) | 20.92 |
+| MEF short-run consumption (flow-trace) | 2.45 |
+| MEF short-run prod (regression) | 0.00 |
+| MEF short-run prod (VRE instrument) | 0.00 |
+| LRMER long-run (Cambium) | 0.00 |
+| SRMER short-run (Cambium model) | 0.00 |
+
+So BPAT is optimal or near-optimal under every method -- at most 20.9 kg/MWh worse than the best possible under any single accounting choice, near-free insurance against the accounting choice.
+
+**Worst-case regret, best 8 regions (kg/MWh):**
+
+| BA | max regret | binding method | mean regret | n methods |
+|---|---:|---|---:|---:|
+| BPAT | 20.9 | AR-MEF short-run (state-dependent) | 3.9 | 6 |
+| PACW | 57.1 | MEF short-run consumption (flow-trace) | 18.2 | 5 |
+| CISO | 142.7 | AR-MEF short-run (state-dependent) | 54.4 | 6 |
+| IPCO | 188.3 | LRMER long-run (Cambium) | 116.4 | 6 |
+| PGE | 239.4 | AR-MEF short-run (state-dependent) | 72.8 | 5 |
+| PNM | 256.0 | MEF short-run prod (regression) | 168.5 | 6 |
+| AZPS | 272.5 | MEF short-run consumption (flow-trace) | 154.8 | 5 |
+| LDWP | 301.7 | MEF short-run prod (VRE instrument) | 117.1 | 6 |
+
+**Hedge (Rule B).** Best two-region hedge: **BPAT+PACW** (worst-case regret 2.4 kg/MWh, rank-corr 0.56), taking the better of the two under each method. With the hydro core unavailable, best hedge: **PGE+TVA** (worst-case regret 80.4 kg/MWh, rank-corr -0.99).
+
+**Uncertainty (10x).** Replacing the regression MEF with 300 bootstrap draws (min-max over method choice AND estimation error), the robust site BPAT survives in 100% of draws and the low-regret core in 100%; the verdict is insensitive to estimation error (reference-prior Bayesian draws agree).
