@@ -214,7 +214,12 @@ The min-max-regret site is **BPAT**, with a worst-case regret of **20.9 kg/MWh**
 the outright optimum under four of the six methods and within 2.4 kg/MWh under a
 fifth, so its *price of robustness* — the most it can trail the best site under
 any single accounting choice — is small against factors that range past
-800 kg/MWh. The **low-regret core** (regions within 10% of each method's spread of
+800 kg/MWh. No site achieves uniformly zero regret, though: even BPAT trails the
+cleanest region under the state-dependent AR-MEF by 20.9 kg/MWh (0.18 MtCO2/yr for
+a 1 GW load). All six methods are carbon intensities on a common kg/MWh basis, so a
+fixed candidate load rescales them identically to MtCO2/yr and this gap is genuine,
+not a units artifact — robustness here is a minimised worst case, not its
+elimination. The **low-regret core** (regions within 10% of each method's spread of
 optimal on *every* method) is exactly **{BPAT, PACW}**, recovering the
 specification curve's robust-green set from an optimisation rather than a
 classification. Propagating the regression-MEF estimation uncertainty (bootstrap

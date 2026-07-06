@@ -373,7 +373,13 @@ def _write_build1(cfg: Config, factors: pd.DataFrame, mmr: pd.DataFrame,
         lines.append(f"| {meth} | {val:.2f} |")
     lines += ["", f"So {r} is optimal or near-optimal under every method -- at most "
               f"{s['robust_site_max_regret_kgmwh']:.1f} kg/MWh worse than the best possible under "
-              "any single accounting choice, near-free insurance against the accounting choice.",
+              "any single accounting choice, near-free insurance against the accounting choice. "
+              f"No site achieves uniformly zero regret, however: even {r} trails the cleanest "
+              f"region under the {s['robust_site_binding_method']} by "
+              f"{s['robust_site_max_regret_kgmwh']:.1f} kg/MWh. All six methods are carbon "
+              "intensities on a common kg/MWh basis (so a fixed candidate load rescales them all "
+              "identically to MtCO2/yr), which makes this a genuine gap, not a units artifact -- "
+              "robustness here is a minimised worst case, not its elimination.",
               "", "**Worst-case regret, best 8 regions (kg/MWh):**", "",
               "| BA | max regret | binding method | mean regret | n methods |",
               "|---|---:|---|---:|---:|"]

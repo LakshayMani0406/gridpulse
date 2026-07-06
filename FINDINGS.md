@@ -248,7 +248,7 @@ Ambiguity set: MEF short-run prod (regression), MEF short-run prod (VRE instrume
 | LRMER long-run (Cambium) | 0.00 |
 | SRMER short-run (Cambium model) | 0.00 |
 
-So BPAT is optimal or near-optimal under every method -- at most 20.9 kg/MWh worse than the best possible under any single accounting choice, near-free insurance against the accounting choice.
+So BPAT is optimal or near-optimal under every method -- at most 20.9 kg/MWh worse than the best possible under any single accounting choice, near-free insurance against the accounting choice. No site achieves uniformly zero regret, however: even BPAT trails the cleanest region under the AR-MEF short-run (state-dependent) by 20.9 kg/MWh. All six methods are carbon intensities on a common kg/MWh basis (so a fixed candidate load rescales them all identically to MtCO2/yr), which makes this a genuine gap, not a units artifact -- robustness here is a minimised worst case, not its elimination.
 
 **Worst-case regret, best 8 regions (kg/MWh):**
 
