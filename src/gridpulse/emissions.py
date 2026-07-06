@@ -96,6 +96,55 @@ def _ols(x: np.ndarray, y: np.ndarray) -> tuple[float, float, float]:
     return float(b), float(a), float(r2)
 
 
+_DRIVER_COL = {"demand": "demand_mwh", "generation": "gen_mwh", "fossil": "fossil_mwh"}
+
+
+def mef_pairs(series: pd.DataFrame, driver: str = "demand",
+              min_delta: float = 0.0) -> tuple[np.ndarray, np.ndarray]:
+    """Consecutive-hour first differences (Δdriver, ΔCO2) for the MEF regression.
+
+    Returns (x=Δdriver, y=ΔCO2) over hours exactly one apart, dropping
+    non-consecutive gaps and |Δdriver| <= ``min_delta``. Shared by the point MEF
+    and the uncertainty draws so both regress on identical pairs.
+    """
+    col = _DRIVER_COL[driver]
+    s = series.sort_values("period").reset_index(drop=True)
+    if col not in s.columns or len(s) < 3:
+        return np.empty(0), np.empty(0)
+    consecutive = pd.to_datetime(s["period"]).diff() == pd.Timedelta(hours=1)
+    dco2 = s["co2_kg"].diff()
+    ddrv = s[col].diff()
+    mask = consecutive & dco2.notna() & ddrv.notna() & (ddrv.abs() > min_delta)
+    return ddrv[mask].to_numpy(dtype=float), dco2[mask].to_numpy(dtype=float)
+
+
+def bootstrap_slopes(x: np.ndarray, y: np.ndarray, n_boot: int = 1000,
+                     seed: int = 42) -> np.ndarray:
+    """Case-resampling bootstrap of the OLS slope: the sampling distribution of
+    the MEF. Returns the array of ``n_boot`` slopes."""
+    rng = np.random.default_rng(seed)
+    n = len(x)
+    boots = np.empty(n_boot)
+    for i in range(n_boot):
+        idx = rng.integers(0, n, n)
+        boots[i], _, _ = _ols(x[idx], y[idx])
+    return boots
+
+
+def ols_slope_se(x: np.ndarray, y: np.ndarray) -> tuple[float, float, int]:
+    """OLS slope, its analytic standard error, and n. The reference-prior
+    (Jeffreys) posterior of the slope is Student-t(df=n-2) centered here with
+    this scale -- used for the Bayesian MEF draws."""
+    n = len(x)
+    if n < 3:
+        return float("nan"), float("nan"), n
+    slope, intercept, _ = _ols(x, y)
+    sxx = float(np.sum((x - x.mean()) ** 2))
+    ss_res = float(np.sum((y - (intercept + slope * x)) ** 2))
+    se = float(np.sqrt(ss_res / (n - 2) / sxx)) if sxx > 0 else float("nan")
+    return float(slope), se, n
+
+
 def siler_evans_mef(
     series: pd.DataFrame,
     driver: str = "demand",
@@ -114,35 +163,15 @@ def siler_evans_mef(
         (siting-relevant); ``"generation"`` -> ``gen_mwh``; ``"fossil"`` ->
         ``fossil_mwh``.
     """
-    col = {"demand": "demand_mwh", "generation": "gen_mwh", "fossil": "fossil_mwh"}[driver]
-    s = series.sort_values("period").reset_index(drop=True)
-    if col not in s.columns or len(s) < 3:
-        return None
-    # Consecutive-hour first differences.
-    dt = pd.to_datetime(s["period"]).diff()
-    consecutive = dt == pd.Timedelta(hours=1)
-    dco2 = s["co2_kg"].diff()
-    ddrv = s[col].diff()
-    mask = consecutive & dco2.notna() & ddrv.notna() & (ddrv.abs() > min_delta)
-    x = ddrv[mask].to_numpy(dtype=float)
-    y = dco2[mask].to_numpy(dtype=float)
+    x, y = mef_pairs(series, driver=driver, min_delta=min_delta)
     if len(x) < 3:
         return None
-
     slope, intercept, r2 = _ols(x, y)
-
-    rng = np.random.default_rng(seed)
-    n = len(x)
-    boots = np.empty(n_boot)
-    for i in range(n_boot):
-        idx = rng.integers(0, n, n)
-        b, _, _ = _ols(x[idx], y[idx])
-        boots[i] = b
+    boots = bootstrap_slopes(x, y, n_boot=n_boot, seed=seed)
     lo = float(np.nanpercentile(boots, (1 - ci) / 2 * 100))
     hi = float(np.nanpercentile(boots, (1 + ci) / 2 * 100))
-
     ba = str(series["ba"].iloc[0]) if "ba" in series.columns else "?"
-    return MEFResult(ba, float(slope), lo, hi, float(intercept), float(r2), n, driver)
+    return MEFResult(ba, float(slope), lo, hi, float(intercept), float(r2), len(x), driver)
 
 
 def mef_by_ba(assembled: pd.DataFrame, driver: str = "demand", **kw) -> pd.DataFrame:
