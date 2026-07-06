@@ -1,5 +1,7 @@
 # gridpulse
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21227652.svg)](https://doi.org/10.5281/zenodo.21227652)
+
 **Where should the next data center be sited to minimize _marginal_ grid carbon?**
 
 A new data center is an *increment* of load, so its climate impact is set by the

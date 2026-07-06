@@ -19,6 +19,11 @@ authors:
     email: mani.l@northeastern.edu
 version: 1.0.0
 date-released: "2026-07-07"
+doi: "10.5281/zenodo.21227653"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.21227652"
+    description: "Concept DOI (all versions)"
 license: MIT
 repository-code: "https://github.com/LakshayMani0406/gridpulse"
 url: "https://github.com/LakshayMani0406/gridpulse"
