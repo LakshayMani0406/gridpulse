@@ -6,12 +6,12 @@ Balancing authorities analyzed: **6**
 
 | Rank | BA | MEF (kg/MWh) | AEF (kg/MWh) | rank shift (avg→marg) |
 |---:|---|---:|---:|---:|
-| 1 | CISO | 3 | 89 | +1 |
-| 2 | BPAT | 12 | 13 | -1 |
-| 3 | ERCO | 81 | 310 | +1 |
-| 4 | ISNE | 308 | 256 | -1 |
-| 5 | SOCO | 430 | 411 | +0 |
-| 6 | MISO | 437 | 432 | +0 |
+| 1 | CISO | -8 | 136 | +1 |
+| 2 | BPAT | 13 | 29 | -1 |
+| 3 | ERCO | 103 | 318 | +1 |
+| 4 | ISNE | 309 | 279 | -1 |
+| 5 | SOCO | 316 | 425 | +0 |
+| 6 | MISO | 462 | 465 | +0 |
 
 ## Rank inversions (average-based analysis gets these wrong)
 
